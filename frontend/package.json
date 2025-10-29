@@ -1,0 +1,19 @@
+{
+  "name": "multiagent-docs-frontend",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host --port 5173"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.2"
+  },
+  "devDependencies": {
+    "vite": "^5.4.8",
+    "vite-plugin-solid": "^2.9.1",
+    "typescript": "^5.5.4"
+  }
+}

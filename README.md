@@ -1,41 +1,42 @@
-# Multi-Agent Code Analysis & Docs — Postgres + Docker + Langfuse + Agents
 
-This package extends the Langfuse scaffold by adding **agent stubs** and
-a **Coordinator** that runs them in sequence. It still uses simulated logic for
-Milestones 1–3 but is now structured for **Milestone 4 (Agents)**.
+# Multi-Agent Code Analysis & Documentation (Demo Foundation)
 
-## What's new
-- `app/agents/` with single-responsibility agent classes:
-  - `RepoDetectorAgent`
-  - `ConfigParserAgent`
-  - `ChunkerAgent`
-  - `EmbedderAgent`
-  - `APIDocAgent`
-  - `DBSchemaAgent`
-  - `PMFeatureAgent`
-  - `DiagramAgent`
-  - `WebAugmentAgent`
-  - `CoordinatorAgent`
-- Orchestrator now calls the **CoordinatorAgent**, which invokes the above
-  agents and emits progress + Langfuse spans per agent.
+This repo boots a production-like skeleton for your system:
+- **FastAPI backend** with auth, project creation (zip or repo URL), analysis start/pause/resume, and a **WebSocket** for real-time progress.
+- **Postgres + pgvector** database.
+- **SolidJS (Vite) frontend** with signup/login, project creation, and **pause/resume** controls wired to sockets.
+- **Docker Compose** orchestrating all services.
 
-> This is a production-**ready structure**, but implementations are safe stubs
-> you can replace with real logic (AST parsing, embeddings, web search, etc.).
+> This is Milestone 1–3 ready (Foundation, Preprocessing hooks, and Real-Time progress simulation). Extend `services/` to integrate LangGraph, Azure OpenAI, and Langfuse in later milestones.
 
-## Quick Start
+## Run
+
 ```bash
-cp .env.docker .env
 docker compose up --build
 ```
 
-Open:
-- API docs → http://localhost:8000/docs
-- Health → http://localhost:8000/healthz
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8000 (Swagger at `/docs`)
+- DB: Postgres on `localhost:5432`
 
-## Next steps
-- Plug pgvector + embeddings into `EmbedderAgent`
-- Parse API routes for FastAPI/Express/etc. in `APIDocAgent`
-- Add real ER extraction in `DBSchemaAgent`
-- Generate Mermaid strings in `DiagramAgent`
-- Add web lookups in `WebAugmentAgent` and attach source citations
-- (Optional) Introduce LangGraph for checkpointed pause/resume
+## Frontend Notes
+- Environment vars: `VITE_API_BASE`, `VITE_WS_BASE`
+- Demo flow:
+  1. Sign up or Log in
+  2. Create a project
+  3. Start analysis -> watch WebSocket progress
+  4. Pause / Resume
+
+## Backend Notes
+- Upload via `/projects` with `multipart/form-data`:
+  - `name`: string
+  - `personas`: `SDE,PM`
+  - optional `file`: `.zip`
+  - optional `repo_url`: Git URL (mutually exclusive with file)
+- WebSocket: `/analysis/ws/{project_id}`
+- Pause/Resume: `/analysis/{project_id}/pause|resume`
+
+## Extend
+- Replace the simulated loop in `routers/analysis.py` with **LangGraph** graph execution.
+- Add **Langfuse** tracing around LLM calls.
+- Implement intelligent preprocessing under `services/` and `utils/`.
