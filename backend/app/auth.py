@@ -16,7 +16,6 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 @router.on_event("startup")
 def startup():
     Base.metadata.create_all(bind=engine)
-
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -34,8 +33,7 @@ def signup(payload: UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     user = User(email=payload.email, pw_hash=hash_password(payload.password), role=payload.role)
-    db.add(user)
-    db.commit()
+    db.add(user); db.commit()
     token = create_access_token(str(user.id))
     return Token(access_token=token)
 

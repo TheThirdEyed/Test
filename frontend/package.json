@@ -1,7 +1,7 @@
 {
   "name": "multiagent-docs-frontend",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,8 @@
     "preview": "vite preview --host --port 5173"
   },
   "dependencies": {
-    "solid-js": "^1.9.2"
+    "solid-js": "^1.9.2",
+    "mermaid": "^10.9.3"
   },
   "devDependencies": {
     "vite": "^5.4.8",
