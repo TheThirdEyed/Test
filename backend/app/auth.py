@@ -5,14 +5,13 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 import jwt
 
-from .database import get_db, Base
+from .database import get_db, Base, engine
 from .models import User
 from .schemas import UserCreate, LoginIn, Token
 from .config import settings
-from .database import engine
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 @router.on_event("startup")
 def startup():

@@ -1,6 +1,6 @@
 
 from fastapi import UploadFile, HTTPException
-import zipfile, os, io
+import zipfile, io
 
 def validate_and_extract_zip(file: UploadFile, dest: str, max_mb: int = 100):
     if not file.filename.lower().endswith(".zip"):

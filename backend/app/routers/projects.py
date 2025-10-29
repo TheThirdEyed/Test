@@ -2,11 +2,11 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form
 from sqlalchemy.orm import Session
 from typing import Optional
-import os, shutil, uuid
+import os
 
 from ..database import get_db
 from ..models import Project, ActivityEvent
-from ..schemas import ProjectCreate, ProjectOut
+from ..schemas import ProjectOut
 from ..config import settings
 from ..utils.zip_utils import validate_and_extract_zip
 from ..utils.git_utils import clone_repo

@@ -1,6 +1,6 @@
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Text
 from datetime import datetime, timezone
 from .database import Base
 
@@ -15,12 +15,10 @@ class User(Base):
     role: Mapped[str] = mapped_column(String(20), default="User")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
-    projects = relationship("Project", back_populates="owner")
-
 class Project(Base):
     __tablename__ = "projects"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    owner_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True, nullable=False, default=1)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     repo_source: Mapped[str] = mapped_column(String(10), default="upload")  # upload|git
     repo_url: Mapped[str | None] = mapped_column(String(1024))
@@ -29,13 +27,11 @@ class Project(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
-    owner = relationship("User", back_populates="projects")
-
 class ActivityEvent(Base):
     __tablename__ = "activity_events"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"), index=True)
+    project_id: Mapped[int] = mapped_column(Integer, ForeignKey("projects.id"), index=True)
     stage: Mapped[str] = mapped_column(String(64))
     message: Mapped[str] = mapped_column(Text)
-    level: Mapped[str] = mapped_column(String(16), default="info")  # info|warn|error
+    level: Mapped[str] = mapped_column(String(16), default="info")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

@@ -1,5 +1,5 @@
 
-import git, os
+import git
 
 def clone_repo(url: str, dest: str):
     try:

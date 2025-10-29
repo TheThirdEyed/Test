@@ -54,9 +54,8 @@ function App() {
     ws = new WebSocket(`${WS_BASE}/analysis/ws/${id}`);
     ws.onmessage = (ev) => {
       const d = JSON.parse(ev.data);
-      setLog((prev) => [`${d.stage}: ${d.progress}%`, ...prev].slice(0, 100));
+      setLog((prev) => [`${d.stage}: ${d.progress}%`, ...prev].slice(0, 200));
     };
-    ws.onclose = () => {};
   }
 
   async function pause() {
